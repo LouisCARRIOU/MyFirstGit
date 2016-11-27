@@ -1,0 +1,307 @@
+/* TODO : Faire l'affichage en mode colonne (nottament pour l'icone => faire checkbox ou optionsbox) */
+.clSelect {
+	display: block;
+	outline: none;
+}
+
+.clSelect>.result {
+	display: none;
+}
+
+.clSelect {
+}
+
+/* Bouton */
+	/*General*/
+		/*.clSelect .button {
+			background: none;
+			border: none;
+			width: auto;
+			height: auto;
+			padding: 0;
+			vertical-align: top;
+			position: relative;
+		}
+		.clSelect .button *,
+		.clSelect .button {
+			display: inline-block;
+			cursor: pointer;
+			outline: none;
+
+			font-size: 14px;
+			font-weight: normal;
+			text-shadow: none;
+			text-decoration: none;
+			color: rgba(86, 86, 86, 0.8);
+		}
+*/
+		.clSelect>.button,
+		.clSelect>.listContainer>.button,
+		.clSelect>.addContainer >.button {
+			padding: 4px 10px;
+		    position: relative;
+		    cursor: default;
+		
+			background-color: #f5f5f5;
+			background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+			background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+			background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+			background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+			background-image: linear-gradient(to bottom, #ffffff, #e6e6e6);
+			background-repeat: repeat-x;
+			
+			border: 1px solid #CCC;
+			border-color: #e6e6e6 #e6e6e6 #bfbfbf;
+			border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
+
+			box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+			-moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+			-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
+			outline: none;
+		}
+	/* Focus et hover */
+		.clSelect>.listContainer>.button:hover,
+		.clSelect>.addContainer >.button:hover {
+			color: #333333;
+			text-decoration: none;
+			opacity: 1;
+		}
+
+		.clSelect>.listContainer>.button.focused{
+			margin-top: 0px ;
+			border: 1px outset #CCC;
+		}
+
+		.clSelect>.listContainer>.button:hover,
+		.clSelect>.addContainer >.button:hover,
+		.clSelect>.listContainer>.button.focused {
+			background-color: #F2F2F2;
+			background-image: url(../../svg0605.svg?from=%23FFF&amp;to=%23F2F2F2);
+			background-image: -o-linear-gradient(top, #FFF, #F2F2F2);
+			background-image: -ms-linear-gradient(top, #FFF, #F2F2F2);
+			background-image: -moz-linear-gradient(top, #FFF, #F2F2F2);
+			background-image: -webkit-gradient(linear, left top, left bottom, from(#FFF), to(#F2F2F2));
+			background-image: -webkit-linear-gradient(top, #FFF, #F2F2F2);
+			background-image: linear-gradient(top, #FFF, #F2F2F2);
+			border-color: #CCC;
+			-moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+			-webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+			box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+			background-position: 0 -15px;
+			-webkit-transition: background-position 0.1s linear;
+			-moz-transition: background-position 0.1s linear;
+			-o-transition: background-position 0.1s linear;
+			transition: background-position 0.1s linear;
+		}
+	/* Selectionné */
+		.clSelect>.listContainer>.button.selected *{
+			cursor: default;
+			font-weight: bold;
+			
+			color: rgba(6, 6, 6, 0.7);
+			text-shadow: 1px 1px 1px #FFF;
+		}
+
+		.clSelect>.listContainer>.button.selected{
+			-moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.2) ;
+			-webkit-box-shadow: inset 0 1px 4px rgba(0,0,0,0.3), 0 2px 0px rgba(255, 255, 255, 0.2) ;
+			box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(255, 255, 255, 0.2) ;
+		}
+	/* Désactivé */
+		.clSelect .button.disabled>*{
+			opacity: 0.7;
+			color: #BBB !important;
+			font-weight: 100 !important;
+		}
+		.clSelect .button.disabled{
+			border-color: #CCC;
+			background: #FFF;
+		}
+
+/* Clone du bouton (lors de déplacement drag&drop pour organiser l'ordre)*/
+	.clSelect .button.clone{
+		opacity: 0.7;
+	}
+
+/* Bouton de suppression */
+
+	.clSelect .button>.removeButton{
+	    padding: 0px 1px 1px 3px;
+	    border: 1px solid #BBB;
+	    border-top: none;
+	    border-right: none;
+	    border-radius: 0px 0px 0px 10px;
+	    position: absolute;
+	    top: 0px;
+	    right: 0px;
+	    opacity: 0.7;
+	    display: none;
+	}
+	.clSelect .button:hover>.removeButton{
+		display: initial;
+	}
+	.clSelect .button>.removeButton:hover{
+		opacity: 1;
+	}
+	.clSelect .button>.removeButton>img{
+	    width: 10px;
+	    margin-bottom: -1px;
+	}
+
+/* Affichage de la liste en colonne */
+	/* Bouton*/
+		.clSelect.columnView .button {
+			display: block;
+			position: relative;
+		}
+	/* Indicateur */
+		.clSelect.columnView .button>.icon {
+			width: 10px;
+			height: 10px;
+			margin-bottom: -1px;
+			margin-right: 6px;
+			margin-left: -2px;
+			display: inline-block;
+			border: 1px inset #AAA;
+			border-radius: 9px / 5px;
+		}
+
+
+
+/* Affichage de la liste en ligne */
+	/* Bouton */
+		.clSelect.rowView .button {
+			display: inline-block;
+		}
+
+		.clSelect.rowView .button {
+			padding-bottom: 10px;
+		}
+
+		.clSelect.rowView .button:first-child {
+			margin-right: -1px;
+			border-top-left-radius: 20px;
+			border-bottom-left-radius: 10px;
+			-moz-border-top-left-radius: 20px;
+			-moz-border-bottom-left-radius: 10px;
+			-webkit-border-top-left-radius: 20px;
+			-webkit-border-bottom-left-radius: 10px;
+		}
+
+		.clSelect.rowView .button:last-child {
+			margin-left: -1px;
+			border-top-right-radius: 10px;
+			border-bottom-right-radius: 20px;
+			-moz-border-top-right-radius: 10px;
+			-moz-border-bottom-right-radius: 20px;
+			-webkit-border-top-right-radius: 10px;
+			-webkit-border-bottom-right-radius: 20px;
+		}
+	/* Indicateur */
+		.clSelect.rowView .button>.icon {
+			position: absolute;
+			width: 60%;
+			left:0px;
+			margin-left: 20%;
+			height: 2px;
+			display: inline-block;
+			bottom: 5px;
+			border: 1px inset #EEE;
+		}
+
+
+/* Indicateur */
+	.clSelect .button>.icon {
+		background: rgb(179, 0, 2);
+	}
+
+	.clSelect .button.selected>.icon {
+		background: #1DAF00;
+	}
+
+	.clSelect .button.disabled>.icon{
+		opacity: 0.2;
+	}
+
+
+
+/* Zone d'ajout */
+	
+	.clSelect>.addContainer{
+		text-align: center;
+	}
+	.clSelect>.addContainer>* {
+		text-align: initial;
+	}
+
+
+	.clSelect .addContainer.oneInput{
+		display: flex;
+	}
+	.clSelect .addContainer.oneInput>input{
+		width: 100%;
+		padding-right: 20px;
+	}
+	.clSelect .addContainer.oneInput>.button{
+		margin-left: -21px;
+	}
+	
+	.clSelect .addContainer>.button{
+		display: inline-block;
+		padding: 0px 2px
+	}
+
+	.clSelect .addContainer>.button:hover{
+		border: outset 1px #CCC;
+	}
+
+	.clSelect .addContainer>.button:active{
+		box-shadow: inset 0px 0px 4px #AAA;
+	}
+
+
+	.clSelect .addContainer>.button>img{
+		width: 16px;
+		height: 16px;
+		margin-top: 1px;
+		margin-bottom: -1px;
+		display: none;
+	}
+	.clSelect .addContainer>.button>img.add{
+		display: initial;
+	}
+	.clSelect .addContainer.error>.button>img.add{
+		display: none;
+	}
+	.clSelect .addContainer.error>.button>img.error{
+		display: initial;
+	}
+
+	.clSelect .addContainer.error>.button{
+		border-color:transparent!important;
+		cursor: default!important;
+		box-shadow: none !important;
+		background: none!important;	
+	}
+
+/*
+	.clSelect .addContainer.empty>.button>img.empty,
+	.clSelect .addContainer.unique>.button>img.unique{
+		display: initial;
+	}
+
+	.clSelect .addContainer.empty>.button>img.add,
+	.clSelect .addContainer.unique>.button>img.add{
+		display: none
+	}
+
+	.clSelect .addContainer.empty>.button,
+	.clSelect .addContainer.unique>.button,
+	.clSelect .addContainer.empty>.button>img,
+	.clSelect .addContainer.unique>.button>img{
+		border-color:transparent!important;
+		cursor: default!important;
+		box-shadow: none !important;
+		background: none!important;
+	}
+*/

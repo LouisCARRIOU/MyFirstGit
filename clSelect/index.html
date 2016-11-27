@@ -1,0 +1,384 @@
+<!doctype html>
+<html>
+<head>
+<meta charset = "utf-8">
+<title>Document sans nom</title>
+</head>
+
+<script src = "../jquery-2.1.4.js"></script>
+
+<link rel = "stylesheet" href="../jqueryUi/jquery-ui-1.10.4.css" type = "text/css" />
+<script src = "../jqueryUi/jquery-ui-1.10.4.js"></script> 
+
+<link rel = "stylesheet" href = "../clAlert/clAlert.css" type = "text/css" />
+<script src = "../clAlert/clAlert.js"></script>    
+
+<link rel = "stylesheet" href = "clSelect.css" type = "text/css" />
+<script src = "clSelect.js"></script>    
+
+<script language = "javascript">
+	$(document).ready(function(e) {
+		// var $newEl = $("#toto")
+		// $newEl.on("change", function() { console.log("changement") });
+		// $newEl = $newEl.clSelect();
+		// 	$newEl.clSelect("addButton", "toto");
+	 //   	$("#test").append($newEl);
+
+		// function test() {
+		// 	console.log($newEl.val());
+		// }
+
+		// $("span").on("click", test);
+
+	 // 	var $toto = $.clSelect({ multi: false, value:["Homme", "Femme"] });
+		
+		// var $toto = $.clSelect({ multi: true, ctrlKey: false, value:["SMS", "Mail"], disabled: [] });
+		
+		// var $toto = $.clSelect({ multi: true, ctrlKey: false, value:["SMS"], disabled: [] });
+		
+		// var $toto = $.clSelect({ multi: true, ctrlKey: true, value: ["Mail"], disabled: [] });
+
+		// var $toto = $.clSelect({ multi: true, multiOnlyWithKey:false, ctrlKey: false, value: ["NOT"], disabled: [] });
+
+		// $.clSelect({	
+		// 	className: "",
+		// 	view: 'row',		//"row" ou "column"
+		// 	multi: false, 		// true => Sélection multiple possible
+		// 	ctrlKey: true, 		// La sélection multiple (si il est possible) ce fait par l'appui de ctrl. Sinon si sélection simple permet de désactiver le bouton
+		// 	shiftKey: true, 		// La sélection multiple de tous le éléments entre le dernier élément cliqué et le cliqué
+		// 	multiOnlyWithKey: true,	// Permet de sélectionner plusieurs éléments seulement lorsque l'on appui sur la touche ctrl ou maj (si celle si sont activés)
+		// 	indicator: true, 	// Indicateur vert rouge pour savoir si c'est sélectionner ou non 
+		// 	value: [{ label: "element1", name: "first" }, { label: "element2", name: "sec" }, { label: "element", name: "thd" }],
+		// 	disabled: [],		//
+		// 	separation: ";",	// Type de séparation pour les valeurs
+		// 	autoNext: false,	// Permet de modifier le focus sur l'élément suivant lorsque l'on clique sur un bouton 
+		// 	keepInside: true,	// TODO lorsque l'on navigue avec le clavier ou que l'on sélectionne avec 1 unique, on ne met pas le focus vers des éléments extérieur, on reste seulement dans le select
+		// 	tabInside: false,	// TODO Permet lors d'un appui sur tabulation de rester ou non dans le select 
+		// 	tabNav: false,		// TODO Permet de naviguer à l'élément suivant si on est sur sur le select ou non
+		// 	keyNav: true,		// TODO Permet de naviguer à l'aide des flèches directionnelles dans le select
+		// 	onRendering: function($el, data) {}, //TODO  ...
+		// 	createLabel: function(data) { // DONE Fonction permettant de créer la valeur du label de la data => valeur de renvoie = la valeur du label souhaité
+		// 		if($.isPlainObject(data) && 'label' in data) return data.label; 
+		// 		else return data;
+		// 	},		
+		// 	onGetValue: function(data, i, $el, label) {}, // DONE Fonction appellée lorsque l'on récupère la valeur
+		// 	onSetValue: function(wanted, checkedElementData, $element){} // DONE Fonction appellée lorsque l'on souhaite sélectionner des éléments => lorsque l'on parcourt l'ensemble des éléments pour savoir si celà correspond à celui attendu
+  //      	});
+
+		// var $btn1 = $("<span>Btn1</span>");
+		// var $toto = $.clSelect({ multi: true, ctrlKey: false, value: [$btn1, $("<span>Btn2</span>")], disabled: [] }).addClass("LULU");
+		// $btn1.val(1).val(0).val(false).val(true);
+
+		// var $new = $.clSelect({ multi: false, ctrlKey: false, value: ["TITI", "TOTO"], disabled: [0] });
+		// $(document.body).prepend($new);
+
+
+
+		var defaultValue = ["Louis","Lucile","Béné","Marion","Manon"];
+		var defaultObjectValue = [
+			{firstName: "Louis", name:"CARRIOU", removable:false},
+			{firstName: "Lucile", name:"LAINE", removable:false},
+			{firstName: "Béné", name:"MARTIN", selected: true},
+			{firstName: "Marion", name:"LAINE", focused:true},
+			{firstName: "Manon", name:"LHEUREUX", disabled:true}];
+
+
+
+		// Association des fonctions par defaut pour le plugin
+			// Afin de mettre a jour les options par defauts, trois solutions : 
+			$.fn.clSelect.defaults.beforeRemoving = function(){ console.log("Ma premiere fonction de suppression")}
+			$.fn.clSelect("options","beforeRemoving",function(){ console.log("Ma deuxieme fonction de suppression")});
+
+			$.fn.clSelect("options",{
+				beforeRemoving: function(ui,data){
+					$.clalert({
+						Titre:"Suppression",
+						Message:"Etes vous sur de vouloir supprimer l'élément " + ui.label + " ?",
+						Boutons:[
+							{ 	
+								value : "Non",
+								deleteOnClick:true
+							},
+						
+							{ 	
+								value : "Oui",
+								onClick: function(){ui.remove(false)}
+							}
+						]
+					})
+					return false;
+				},
+
+				afterCreating: function(options){
+					var $myContainer = $(this).children(".addContainer");
+					$myContainer.tooltip({
+						items: ".button",
+						content: function(){
+							if($myContainer.hasClass("unique")) return "Des donnée identiques sont déjà saisie dans la liste."
+							else if($myContainer.hasClass("empty")) return "Aucune informations n'a été saisie."
+
+							return false;
+						},
+					});
+				}
+			})
+
+		/*****************************************************************************
+			Selection simple d'un genre
+		*****************************************************************************/
+				var param={
+					value: ["Homme","Femme"],
+					multi: false,
+					ctrlKey:true,
+					sortable:false,
+					removable: false
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Selection simple d'un genre")
+				)
+
+
+		/*****************************************************************************
+			Choix multiple seulement avec key
+		*****************************************************************************/
+				var param={
+					value: defaultValue,
+					multi: true,
+					ctrlKey:true,
+					shiftKey:true,
+					sortable:false,
+					disabled:[2,4],
+					selected:[1,3]
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Choix multiple seulement avec key")
+				)
+
+
+		/*****************************************************************************
+			Choix multiple sans ctrl key	
+		*****************************************************************************/
+				var param={
+					value: defaultValue,
+					multi: true,
+					ctrlKey:false,
+					shiftKey:true,
+					sortable:false,
+					disabled:[2,4],
+					selected:[1,3]
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Choix multiple sans ctrl key")
+				)
+
+
+		/*****************************************************************************
+			Tri des éléments
+		*****************************************************************************/
+			
+				var param={
+					value: defaultValue,
+					sortable:true
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Tri des éléments")
+				)
+
+
+		/*****************************************************************************
+			Ajout dans la liste
+		*****************************************************************************/
+			
+				var param={
+					value: defaultValue,
+					sortable:true,
+					addable:true
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Ajout dans la liste")
+				)
+
+
+		/*****************************************************************************
+			Ajout dans la liste
+		*****************************************************************************/
+				var $nameInput = $("<input>")
+				var $firstInput = $("<input>")
+				var param={
+					value: defaultObjectValue,
+					sortable:true,
+					addable:{firstName:$firstInput,name:$nameInput}
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Ajout dans la liste (avec champs d'ajout personnalisé)")
+				)
+
+				$nameInput.before($("<span> Nom : </span>").click(function(){$nameInput.focus()}));
+				$firstInput.before($("<span> Prénom : </span>").click(function(){$firstInput.focus()}));
+
+				
+
+		/*****************************************************************************
+			Creation de liste sans selection
+		*****************************************************************************/
+				var $nameInput = $("<input>")
+				var $firstInput = $("<input>")
+				var param={
+					value: ["c'est","un","éééé"],
+					multi: 0,
+					sortable:true,
+					indicator:false,
+					addable:{name:$nameInput,firstName:$firstInput}
+				}
+				$.clSelect(param).before(
+					$("<h2>").html("Création de liste")
+				)
+
+				$nameInput.before($("<span> Nom : </span>").click(function(){$nameInput.focus()}));
+				$firstInput.before($("<span> Prénom : </span>").click(function(){$firstInput.focus()}));
+
+				
+
+
+
+
+
+
+
+
+
+
+
+
+	// Ajout des boutons pour changer de vue
+		$(".clSelect").each(function(){
+			var curTable = $(this);
+			$(this).before(
+				$("<div>").append(
+					$("<button>").data("table",curTable).html("Afficher les paramètres").click(function(){
+						if($(this).html()=="Afficher les paramètres"){
+							var param = $(this).data("table").clSelect("options");
+							console.log(param)
+							//$(this).after($("<div>").html(JSON.stringify(param,undefined, '\t').replaceAll('\n','<br>').replaceAll('\t',"&nbsp;")));
+							var $ctn = $("<div>").css({background:"#333",border:"3px outset #999", padding:"20px"});
+							$(this).after($ctn)
+							jsonViewer($ctn,param);
+							$(this).html("Cacher les paramètres")
+						}else{
+							$(this).parent().children("div").remove();
+							$(this).html("Afficher les paramètres")
+						}
+					})
+				),
+				
+				$("<div>").append(
+					$("<button>").data("table",$(this)).html("Changer de vue").click(function(){
+						var $myTable = $(this).data('table');
+						$myTable.clSelect("changeView")
+					})
+				)
+			)
+		})
+
+
+
+
+		function jsonViewer($container,data,$attribute){
+			
+			function addExpension($myArray){
+				if($attribute instanceof jQuery)
+				$attribute.prepend(
+					$("<img>")
+					.data("value",$myArray)
+					.css("margin-left","-20px")
+					.css("width","20px")
+					.click(function(){
+						if($(this).hasClass("hide")){
+							$(this)
+							.attr("src","../../images/arrow/arrow-down.png")
+							.removeClass("hide")
+							.data("value").show();
+						}else{
+							$(this)
+							.attr("src","../../images/arrow/arrow-right.png")
+							.addClass("hide")
+							.data("value").hide();
+						}
+					})
+					.click()
+				)
+			}
+
+			if(typeof data == "string"){
+				var $myEl = $("<span>")
+					.css("color","rgb(240, 50, 50)")
+					.css("padding-left","20px")
+					.append(
+						'" ',
+						$("<span>").css("color","rgb(220, 220, 20)").html(data),
+						' "'
+					)
+					.appendTo($container)
+			}
+			else if($.isNumeric(data)){
+				var $myEl = $("<span>")
+					.css("padding-left","20px")
+					.css("color","rgb(20, 200, 230)")
+					.html(data)
+					.appendTo($container)			
+			}
+			else if(typeof data == 'boolean'){
+				var $myEl = $("<span>")
+					.css("color","rgb(255, 0, 0)")
+					.css("padding-left","20px")
+					.html(data == true ? 'true':'false')
+					.appendTo($container)
+			}
+			else if(data instanceof jQuery){
+				var $myEl = $("<span>")
+					.css("padding-left","20px")
+					.css("color","rgb(210, 0, 210)")
+					.html("JqueryElement")
+					.appendTo($container)
+			}
+			else if($.isArray(data)){
+				var $myArray = $("<span>").appendTo($container).append('[');
+				for(var i in data){
+					var $myAttribute = $("<span>").appendTo($myArray)
+					$myObj = $("<div>").css("padding-left","30px").appendTo($myAttribute)
+					jsonViewer($myObj,data[i]);
+					if(i!=data.length-1) $myObj.append(",")
+				}
+				$myArray.append("],");
+
+				addExpension($myArray);
+			}
+			else if($.isPlainObject(data)){
+				var $myArray = $("<span>").appendTo($container).append('{');
+				for(var i in data){
+					var $myAttribute = $("<span>").css({"font-weight":"bold", color:"rgb(0, 180, 95)", padding:"2px 5px"}).html(i+" : ")
+					$myObj = $("<div>").css("padding-left","30px").append($myAttribute).appendTo($myArray)
+					jsonViewer($myObj,data[i],$myAttribute);
+					if(i!=data.length-1) $myObj.append(",")
+				}
+				$myArray.append("}");
+				addExpension($myArray);
+				//$container.css("color","rgb(50,200,50)")
+			}
+			else if(typeof data == "function"){
+				if($attribute instanceof jQuery)$attribute.css("background","rgb(0, 60, 150)")
+				var $myEl = $("<code>").attr("type","javascript").html(String(data));
+				$container.append($myEl)
+				addExpension($myEl);
+			}
+			else {
+				$container.append(JSON.stringify(data))
+			}
+		}
+
+	});
+</script>
+
+<body>
+</body>
+</html>
